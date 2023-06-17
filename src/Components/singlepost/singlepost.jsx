@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom"
 import "./singlepost.css"
 import { useContext, useEffect,useState } from "react";
-import axios from "axios"
 import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
+import { axiosInstance } from "../../config";
 
 export default function Singlepost() {
   const location=useLocation();
@@ -15,7 +15,7 @@ export default function Singlepost() {
   const [updateMode, setUpdateMode]=useState(false);
   useEffect(()=>{
     const getPost=async()=>{
-      const res=await axios.get("/posts/"+path);
+      const res=await axiosInstance.get("/posts/"+path);
       setPost(res.data);
       setTitle(res.data.title);
       setdescrip(res.data.descrip);
@@ -27,7 +27,7 @@ export default function Singlepost() {
 
   const handleDelete=async()=>{
     try{
-      await axios.delete(`/posts/${post._id}`,{
+      await axiosInstance.delete(`/posts/${post._id}`,{
         data:{username:user.username},
       });
       window.location.replace("/");
@@ -36,7 +36,7 @@ export default function Singlepost() {
 
   const handleUpdate=async()=>{
     try{
-      await axios.put(`/posts/${post._id}`,{
+      await axiosInstance.put(`/posts/${post._id}`,{
         username:user.username, title:title,descrip:descrip,
       });
       setUpdateMode(false);

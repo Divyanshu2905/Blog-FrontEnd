@@ -1,7 +1,7 @@
 import { useContext, useState } from "react"
 import "./write.css"
-import axios from "axios";
 import { Context } from "../../context/Context";
+import { axiosInstance } from "../../config";
 
 
 export default function Write() {
@@ -25,14 +25,14 @@ export default function Write() {
       data.append("file",file)
       newPost.photo=filename;
       try{
-        await axios.post("/upload",data);
+        await axiosInstance.post("/upload",data);
       }catch(err){}
     }
     const category={
       name:categories[0],
     }
     let flag=0;
-    const met=await axios.get("/categories")
+    const met=await axiosInstance.get("/categories")
     const cat=met.data;
     cat.map((c)=>{
       if(c.name===categories[0]){
@@ -41,11 +41,11 @@ export default function Write() {
     })
     if(flag===0){
       try{
-        await axios.post("/categories",category);
+        await axiosInstance.post("/categories",category);
       }catch(err){}
     }
     try{
-      const res=await axios.post("/posts",newPost);
+      const res=await axiosInstance.post("/posts",newPost);
       window.location.replace(`/post/${res.data._id}`);
     }catch(err){}
   }
